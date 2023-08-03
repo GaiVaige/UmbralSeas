@@ -80,6 +80,9 @@ public class EnemyChooser : MonoBehaviour
             currentThreat = cm.currentActingCharacter;
 
 
+        enemyHPRefresh = GetComponentInChildren<EnemyStats>().currentHP;
+        enemyHP.text = enemyHPRefresh.ToString();
+
 
         if (cm.PlayerTurn)
         {
@@ -103,8 +106,7 @@ public class EnemyChooser : MonoBehaviour
 
             }
 
-            enemyHPRefresh = GetComponentInChildren<EnemyStats>().currentHP;
-            enemyHP.text = enemyHPRefresh.ToString();
+
         }
         else if(!cm.PlayerTurn)
         {
