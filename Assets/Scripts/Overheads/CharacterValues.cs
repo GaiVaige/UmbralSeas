@@ -31,7 +31,7 @@ public class CharacterValues : MonoBehaviour
         cm = FindObjectOfType<CombatManager>();
         gm = FindObjectOfType<GameManager>();
         AddToParty();
-        levelEXPreq = currentEXP + 50 * (levelRate + Level/5);
+        levelEXPreq = 50 * (levelRate + Level/5);
     }
 
     // Update is called once per frame
@@ -49,19 +49,11 @@ public class CharacterValues : MonoBehaviour
 
     public void RunCalcsLeveling()
     {
-        if(cm.endOfCombat == true)
+
+        if (cm.endOfCombat)
         {
             currentEXP += cm.EXPgained;
-            cm.endOfCombat = false;
             hasRun = true;
-        }
-
-
-        if(hasRun == true)
-        {
-            cm.endOfCombat = false;
-            cm.EXPgained = 0;
-            hasRun = false;
         }
 
         if(currentEXP >= levelEXPreq)

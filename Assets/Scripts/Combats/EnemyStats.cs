@@ -30,20 +30,4 @@ public class EnemyStats : MonoBehaviour
         partyHolder = GameObject.Find("PartyHolder");
         partyMembers = partyHolder.GetComponentsInChildren<CharacterValues>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-        }
-
-
-        if (currentHP <= 0)
-        {
-            cm.EXPgained += givenEXP;
-            Destroy(gameObject);
-        }
-    }
 }

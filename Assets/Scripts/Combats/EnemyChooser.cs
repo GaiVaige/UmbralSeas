@@ -9,11 +9,20 @@ public class EnemyChooser : MonoBehaviour
     public GameObject attackingCharacter;
     public string currentThreat;
     public PlayerCombat attackingCharScript;
+    public CharacterValues playerHealth;
     public CombatManager cm;
     public GameObject enemyValues;
     public string enemyName;
     public int enemyHPRefresh;
     public TMP_Text enemyHP;
+    public bool hasAttacked;
+    public EnemyStats es;
+
+
+    [Header("AI Behaviours")]
+    public bool totalRandom;
+    public int totalRandomOutput;
+    public bool targetWeakest;
 
     public void Start()
     {
@@ -33,28 +42,77 @@ public class EnemyChooser : MonoBehaviour
     public void Update()
     {
 
-        
-
-        currentThreat = cm.currentActingCharacter;
-        if (attackingCharacter == null || attackingCharScript == null)
+        if(GetComponentInChildren<EnemyStats>().currentHP <= 0)
         {
-            attackingCharacter = GameObject.Find(currentThreat + "UI");
-            attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
+                cm.EXPgained += GetComponentInChildren<EnemyStats>().givenEXP;
+                Destroy(this.gameObject);
         }
 
 
+            currentThreat = cm.currentActingCharacter;
 
 
 
-        
-        if (attackingCharacter.name != currentThreat + "UI")
+        if (cm.PlayerTurn)
         {
-            attackingCharacter = GameObject.Find(currentThreat + "UI");
+            if (attackingCharacter == null || attackingCharScript == null)
+            {
+                attackingCharacter = GameObject.Find(currentThreat + "UI");
+                attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
+            }
 
+
+
+
+
+
+            if (attackingCharacter.name != currentThreat + "UI")
+            {
+                attackingCharacter = GameObject.Find(currentThreat + "UI");
+
+            }
+
+            enemyHPRefresh = GetComponentInChildren<EnemyStats>().currentHP;
+            enemyHP.text = enemyHPRefresh.ToString();
+        }
+        else
+        {
+            if (totalRandom && !hasAttacked)
+            {
+                totalRandomOutput = Random.Range(0, 3);
+
+                if(totalRandomOutput == 0)
+                {
+                    attackingCharacter = GameObject.Find("VerdstaltUI");
+                    attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
+                    playerHealth = attackingCharScript.thisCharacter;
+                    BasicAttack();
+                }
+
+                if (totalRandomOutput == 1)
+                {
+                    attackingCharacter = GameObject.Find("CorsolaUI");
+                    attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
+                    playerHealth = attackingCharScript.thisCharacter;
+                    BasicAttack();
+                }
+
+                if (totalRandomOutput == 2)
+                {
+                    attackingCharacter = GameObject.Find("LoganUI");
+                    attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
+                    playerHealth = attackingCharScript.thisCharacter;
+                    BasicAttack();
+                }
+
+            }
+            else if (hasAttacked)
+            {
+                cm.turnInt = 0;
+                cm.PlayerTurn = true;
+            }
         }
 
-        enemyHPRefresh = GetComponentInChildren<EnemyStats>().currentHP;
-        enemyHP.text = enemyHPRefresh.ToString();
     }
 
     public void SetTarget()
@@ -63,5 +121,12 @@ public class EnemyChooser : MonoBehaviour
 
         attackingCharScript.es = attackingCharScript.target.GetComponentInChildren<EnemyStats>();
 
+    }
+
+    public void BasicAttack()
+    {
+        es = GetComponentInChildren<EnemyStats>();
+        playerHealth.currentHP -= 10 + 10 * es.ATK / 5;
+        hasAttacked = true;
     }
 }

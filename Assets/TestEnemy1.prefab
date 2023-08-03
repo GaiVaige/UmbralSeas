@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: 
-  maxHP: 96
-  currentHP: 96
+  maxHP: 345
+  currentHP: 4
   maxFP: 0
   currentFP: 0
-  ATK: 0
+  ATK: 5
   DEF: 0
   MATK: 0
   MDEF: 0

@@ -41,7 +41,16 @@ public class PlayerCombat : MonoBehaviour
 
     public void Update()
     {
+        if (target == null && gm.inCombat)
+        {
+            target = FindObjectOfType<EnemyStats>().gameObject;
+            
+        }
 
+        if(es == null && gm.inCombat)
+        {
+            es = target.GetComponentInChildren<EnemyStats>();
+        }
     }
 
     // Update is called once per frame
@@ -49,7 +58,7 @@ public class PlayerCombat : MonoBehaviour
     {
 
         es.currentHP -= 10 + 10 * thisCharacter.ATK / 5;
-
+        cm.turnInt++;
 
 
         if (cm.characterInt < 2)
