@@ -12,7 +12,6 @@ public class PlayerCombat : MonoBehaviour
     public CharacterValues thisCharacter;
     public GameObject target;
     public EnemyStats es;
-    public bool transitionToNext;
 
     // Start is called before the first frame update
     void Start()

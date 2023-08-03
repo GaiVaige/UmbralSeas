@@ -4822,7 +4822,7 @@ MonoBehaviour:
   enemyHP: {fileID: 0}
   hasAttacked: 0
   es: {fileID: 0}
-  totalRandom: 0
+  totalRandom: 1
   totalRandomOutput: 0
   targetWeakest: 0
 --- !u!1 &1895172446

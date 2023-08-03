@@ -18,6 +18,10 @@ public class EnemyChooser : MonoBehaviour
     public bool hasAttacked;
     public EnemyStats es;
 
+    public EnemyChooser[] currentEnemies;
+    public EnemyChooser currentAttackingEnemy;
+    public bool canAttack;
+
 
     [Header("AI Behaviours")]
     public bool totalRandom;
@@ -35,12 +39,36 @@ public class EnemyChooser : MonoBehaviour
         enemyHP = GetComponentInChildren<TMP_Text>();
         enemyHP.text = enemyValues.GetComponent<EnemyStats>().currentHP.ToString();
         enemyHPRefresh = enemyValues.GetComponent<EnemyStats>().currentHP;
+        currentEnemies = FindObjectsOfType<EnemyChooser>();
+        currentAttackingEnemy = currentEnemies[cm.enemyInt];
 
     }
 
 
     public void Update()
     {
+        if(cm.enemyInt >= currentEnemies.Length)
+        {
+            cm.PlayerTurn = true;
+            cm.turnInt = 0;
+            cm.enemyInt = 0;
+        }
+
+        if (currentAttackingEnemy == null)
+        {
+            currentEnemies = FindObjectsOfType<EnemyChooser>();
+        }
+
+        currentAttackingEnemy = currentEnemies[cm.enemyInt];
+
+
+        if(currentAttackingEnemy.gameObject == this.gameObject)
+        {
+            canAttack = true;
+        }
+
+
+
 
         if(GetComponentInChildren<EnemyStats>().currentHP <= 0)
         {
@@ -55,6 +83,8 @@ public class EnemyChooser : MonoBehaviour
 
         if (cm.PlayerTurn)
         {
+
+            hasAttacked = false;
             if (attackingCharacter == null || attackingCharScript == null)
             {
                 attackingCharacter = GameObject.Find(currentThreat + "UI");
@@ -69,47 +99,51 @@ public class EnemyChooser : MonoBehaviour
             if (attackingCharacter.name != currentThreat + "UI")
             {
                 attackingCharacter = GameObject.Find(currentThreat + "UI");
+                attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
 
             }
 
             enemyHPRefresh = GetComponentInChildren<EnemyStats>().currentHP;
             enemyHP.text = enemyHPRefresh.ToString();
         }
-        else
+        else if(!cm.PlayerTurn)
         {
             if (totalRandom && !hasAttacked)
             {
                 totalRandomOutput = Random.Range(0, 3);
 
-                if(totalRandomOutput == 0)
+                if(totalRandomOutput == 0 && canAttack)
                 {
                     attackingCharacter = GameObject.Find("VerdstaltUI");
                     attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
                     playerHealth = attackingCharScript.thisCharacter;
                     BasicAttack();
+                    StartCoroutine(WaitForAttack());
                 }
 
-                if (totalRandomOutput == 1)
+                if (totalRandomOutput == 1 && canAttack)
                 {
                     attackingCharacter = GameObject.Find("CorsolaUI");
                     attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
                     playerHealth = attackingCharScript.thisCharacter;
                     BasicAttack();
+                    StartCoroutine(WaitForAttack());
                 }
 
-                if (totalRandomOutput == 2)
+                if (totalRandomOutput == 2 && canAttack)
                 {
                     attackingCharacter = GameObject.Find("LoganUI");
                     attackingCharScript = attackingCharacter.GetComponent<PlayerCombat>();
                     playerHealth = attackingCharScript.thisCharacter;
                     BasicAttack();
+                    StartCoroutine(WaitForAttack());
+
                 }
 
             }
             else if (hasAttacked)
             {
                 cm.turnInt = 0;
-                cm.PlayerTurn = true;
             }
         }
 
@@ -127,6 +161,15 @@ public class EnemyChooser : MonoBehaviour
     {
         es = GetComponentInChildren<EnemyStats>();
         playerHealth.currentHP -= 10 + 10 * es.ATK / 5;
+        Debug.Log(this.gameObject.name + " has attacked!");
         hasAttacked = true;
+
     }
+
+    public IEnumerator WaitForAttack()
+    {
+        yield return new WaitForSeconds(2f);
+        cm.enemyInt++;
+    }
+
 }

@@ -17,6 +17,7 @@ public class CombatManager : MonoBehaviour
     public int numberOfPlayerActions;
     public string currentActingCharacter;
     public GameObject currentEnemies;
+    public int enemyInt;
 
 
     public GameObject playerUI1;
@@ -29,6 +30,7 @@ public class CombatManager : MonoBehaviour
         currentActingCharacter = gm.currentParty[0].name;
         PlayerTurn = true;
         turnInt = 0;
+        enemyInt = 0;
     }
 
     // Update is called once per frame

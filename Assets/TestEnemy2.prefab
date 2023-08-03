@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   maxHP: 1205
-  currentHP: 4
+  currentHP: 988
   maxFP: 0
   currentFP: 0
   ATK: 5
