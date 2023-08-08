@@ -66,6 +66,10 @@ public class EnemyChooser : MonoBehaviour
         {
             canAttack = true;
         }
+        else
+        {
+            canAttack = false;
+        }
 
 
 
